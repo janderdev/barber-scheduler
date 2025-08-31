@@ -1,0 +1,25 @@
+name: Haircut Scheduler
+
+on:
+  schedule:
+    - cron: "0 3 * * 6"  # todo sábado 00h (Brasília) = 03h UTC
+  workflow_dispatch:     # permite rodar manualmente pelo GitHub
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+
+      - name: Run scheduler
+        run: python agendamento.py
